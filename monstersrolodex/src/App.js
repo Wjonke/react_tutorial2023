@@ -27,30 +27,48 @@
 // class component version
 
 import { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
 class App extends Component {
+	// constructor runs first
 	constructor() {
 		super();
 
 		//local state
 		this.state = {
-			monsters: [
-				{ name: 'Linda' },
-				{ name: 'Frank' },
-				{ name: 'Jacky' },
-				{ name: 'Jose' },
-			],
+			// init state - monster array as empty
+			monsters: [],
 		};
 	}
 
+	//lifecycle methods
+	//componentDidMount runs only once unless component unmounts
+	// runs after render/mounting
+	componentDidMount() {
+		//fetches json data for users and sets state on render
+		fetch('https://jsonplaceholder.typicode.com/users')
+			.then((response) => response.json())
+			.then((users) =>
+				this.setState(
+					() => {
+						return { monsters: users };
+					},
+					//callback to clg current state
+					() => {
+						console.log(this.state);
+					}
+				)
+			);
+	}
+
+	//render components, runs second after constructor, mounts component
 	render() {
 		return (
 			<div className='App'>
-				{this.state.monsters.map((monster, i) => {
+				{this.state.monsters.map((monster) => {
 					return (
-						<div key={i}>
+						<div key={monster.id}>
 							<h1>{monster.name}</h1>
 						</div>
 					);
