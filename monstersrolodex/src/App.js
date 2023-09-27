@@ -33,58 +33,28 @@ import './App.css';
 class App extends Component {
 	constructor() {
 		super();
+
 		//local state
 		this.state = {
-			name: { firstName: 'Wes', lastName: 'Jonke' },
-			company: 'Self Employed Boi',
+			monsters: [
+				{ name: 'Linda' },
+				{ name: 'Frank' },
+				{ name: 'Jacky' },
+				{ name: 'Jose' },
+			],
 		};
 	}
 
 	render() {
 		return (
 			<div className='App'>
-				<header className='App-header'>
-					<img src={logo} className='App-logo' alt='logo' />
-					<p>
-						Hello my name is {this.state.name.firstName}{' '}
-						{this.state.name.lastName}, I work at{' '}
-						{this.state.company}
-					</p>
-					<button
-						onClick={() => {
-							//adding dynamic name change functionality with callbacks to log current state
-							this.state.name.firstName === 'Wes'
-								? this.setState(
-										() => {
-											return {
-												name: {
-													firstName: 'Gunbunny',
-													lastName: 'Redleg',
-												},
-											};
-										},
-										() => {
-											console.log(this.state);
-										}
-								  )
-								: this.setState(
-										() => {
-											return {
-												name: {
-													firstName: 'Wes',
-													lastName: 'Jonke',
-												},
-											};
-										},
-										() => {
-											console.log(this.state);
-										}
-								  );
-						}}
-					>
-						Change Name
-					</button>
-				</header>
+				{this.state.monsters.map((monster, i) => {
+					return (
+						<div key={i}>
+							<h1>{monster.name}</h1>
+						</div>
+					);
+				})}
 			</div>
 		);
 	}
