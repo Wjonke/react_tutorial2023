@@ -63,19 +63,32 @@ class App extends Component {
 			);
 	}
 
+	//move this function out of onChange so it is not reinitialized every state change, best practice
+	onSearchChange = (event) => {
+		const searchField = event.target.value.toLocaleLowerCase();
+		// sets the state of searchField every time the input value is changed
+		this.setState(() => {
+			return { searchField };
+		});
+	};
+
 	//render components, runs second after constructor, mounts component
 	render() {
+		// destructure "state" and "this", so we dont have to add "this.state."" or "this." everywhere
+		// this is very helpful as components get larger
+		const { monsters, searchField } = this.state;
+		const { onSearchChange } = this;
+
 		// filters the initial state of monsters
 		// if the filter case is true, it returns a new array that we map over
 		// note:  when the "searchField" is empty, all items are true, so they get returned in the new array
-		const filteredMonsters = this.state.monsters.filter((monster) => {
+		const filteredMonsters = monsters.filter((monster) => {
 			return (
 				monster.name
-					// set data searched to lowercase
 					.toLocaleLowerCase()
 					// returns a new array based on the state of searchfield, will return any name thats included
 					// that new array is what is being mapped over on the return
-					.includes(this.state.searchField)
+					.includes(searchField)
 			);
 		});
 
@@ -85,15 +98,7 @@ class App extends Component {
 					className='searchBox'
 					type='search'
 					placeholder='search monsters'
-					onChange={(event) => {
-						const searchField =
-							//set search to lowercase
-							event.target.value.toLocaleLowerCase();
-						// sets the state of searchField every time the input value is changed
-						this.setState(() => {
-							return { searchField };
-						});
-					}}
+					onChange={onSearchChange}
 				/>
 				{/* returns a filtered list of objects to be mapped over and displayed based on the input values */}
 				{filteredMonsters.map((monster) => {
