@@ -1,4 +1,4 @@
-//Functional component version
+//CRA Functional component version
 // import logo from './logo.svg';
 // import './App.css';
 
@@ -37,8 +37,9 @@ class App extends Component {
 
 		//local state
 		this.state = {
-			// init state - monster array as empty
+			// init state
 			monsters: [],
+			searchField: '',
 		};
 	}
 
@@ -64,9 +65,38 @@ class App extends Component {
 
 	//render components, runs second after constructor, mounts component
 	render() {
+		// filters the initial state of monsters
+		// if the filter case is true, it returns a new array that we map over
+		// note:  when the "searchField" is empty, all items are true, so they get returned in the new array
+		const filteredMonsters = this.state.monsters.filter((monster) => {
+			return (
+				monster.name
+					// set data searched to lowercase
+					.toLocaleLowerCase()
+					// returns a new array based on the state of searchfield, will return any name thats included
+					// that new array is what is being mapped over on the return
+					.includes(this.state.searchField)
+			);
+		});
+
 		return (
 			<div className='App'>
-				{this.state.monsters.map((monster) => {
+				<input
+					className='searchBox'
+					type='search'
+					placeholder='search monsters'
+					onChange={(event) => {
+						const searchField =
+							//set search to lowercase
+							event.target.value.toLocaleLowerCase();
+						// sets the state of searchField every time the input value is changed
+						this.setState(() => {
+							return { searchField };
+						});
+					}}
+				/>
+				{/* returns a filtered list of objects to be mapped over and displayed based on the input values */}
+				{filteredMonsters.map((monster) => {
 					return (
 						<div key={monster.id}>
 							<h1>{monster.name}</h1>
